@@ -9,6 +9,8 @@ import json
 from pygame import gfxdraw
 import pygame
 from pygame import *
+import networkx as nx
+from Position import Position
 
 # init pygame
 WIDTH, HEIGHT = 1080, 720
@@ -21,10 +23,8 @@ pygame.init()
 screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
 clock = pygame.time.Clock()
 pygame.font.init()
-
 client = Client()
 client.start_connection(HOST, PORT)
-
 pokemons = client.get_pokemons()
 pokemons_obj = json.loads(pokemons, object_hook=lambda d: SimpleNamespace(**d))
 
@@ -72,7 +72,6 @@ client.add_agent("{\"id\":0}")
 # client.add_agent("{\"id\":1}")
 # client.add_agent("{\"id\":2}")
 # client.add_agent("{\"id\":3}")
-
 # this commnad starts the server - the game is running now
 client.start()
 

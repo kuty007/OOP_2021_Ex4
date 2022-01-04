@@ -8,7 +8,7 @@ epsilon = 0.000001
 
 
 class Pokemon:
-    def __init__(self, graph: nx.DiGraph, value=0, type: int = 0, pos: Position = Position(), json_pok=None):
+    def __init__(self, graph: nx.DiGraph(), value=0, type: int = 0, pos: Position = Position(), json_pok=None):
         if json_pok is not None:
             self.load_pok(json_pok)
         else:
@@ -21,9 +21,9 @@ class Pokemon:
 
     def load_pok(self, json_pok):  # parse string pokemon to pokemon object
         """Function receives the  pokemon string and load the values to the pokemon object """
-        self.value = float(json_pok['Pokemon']['value'])
-        self.type = int(json_pok['Pokemon']['type'])
-        self.pos = Position(location=json_pok['Pokemon']['pos'])
+        self.value = float(json_pok['value'])
+        self.type = int(json_pok['type'])
+        self.pos = Position(location=json_pok['pos'])
 
     def on_edge_pokemon(self, graph: nx.DiGraph):
         for i, j, k in graph.edges(data=""):
@@ -39,4 +39,3 @@ class Pokemon:
                     self.node_src = i
                     self.node_dest = j
                     break
-

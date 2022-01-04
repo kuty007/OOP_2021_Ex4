@@ -1,12 +1,14 @@
 import math
+
+
 class Position:
 
     def __init__(self, location: str = None):
         if location is not None:
             location = location.split(',')
-            self.x = location[0]
-            self.y = location[1]
-            self.z = location[2]
+            self.x = float(location[0])
+            self.y = float(location[1])
+            self.z = float(location[2])
         else:
             self.x = 0
             self.y = 0
