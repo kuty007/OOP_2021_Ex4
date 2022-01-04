@@ -91,6 +91,9 @@ def draw_nodes(graph):
                               radius, Color(64, 80, 174))
         gfxdraw.aacircle(screen, int(x), int(y),
                          radius, Color(255, 255, 255))
+        id_srf = FONT.render(str(i), True, Color(255, 255, 255))
+        rect = id_srf.get_rect(center=(x, y))
+        screen.blit(id_srf, rect)
 
 
 def draw_edges(graph):
@@ -147,13 +150,11 @@ while client.is_running() == 'true':
 
     # refresh surface
     screen.fill(Color(0, 0, 0))
-    # draw nodes
+    # draw nodes and edges
     draw_nodes(graph)
     draw_edges(graph)
-    # draw the node id
-    # id_srf = FONT.render(str(graph.nodes.get(i)), True, Color(255, 255, 255))
-    # rect = id_srf.get_rect(center=(x, y))
-    # screen.blit(id_srf, rect)
+
+
 
     # draw agents
     for agent in agents:
