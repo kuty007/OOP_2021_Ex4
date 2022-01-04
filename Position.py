@@ -1,6 +1,4 @@
 import math
-
-
 class Position:
 
     def __init__(self, location: str = None):
