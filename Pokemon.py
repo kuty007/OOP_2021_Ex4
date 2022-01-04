@@ -20,13 +20,13 @@ class Pokemon:
         self.on_edge_pokemon(graph)
 
     def load_pok(self, json_pok):  # parse string pokemon to pokemon object
-        """Function receives the  pokemon string and load the valuses to the pokemon object """
+        """Function receives the  pokemon string and load the values to the pokemon object """
         self.value = float(json_pok['Pokemon']['value'])
         self.type = int(json_pok['Pokemon']['type'])
         self.pos = Position(location=json_pok['Pokemon']['pos'])
 
     def on_edge_pokemon(self, graph: nx.DiGraph):
-        for i, j, k in graph.edges(data="w"):
+        for i, j, k in graph.edges(data=""):
             len_edge = graph.nodes[i]['pos'].distance(graph.nodes[j]['pos'])
             pok_to_src = graph.nodes[i]['pos'].distance(self.pos)
             pok_to_dst = graph.nodes[j]['pos'].distance(self.pos)
@@ -39,3 +39,4 @@ class Pokemon:
                     self.node_src = i
                     self.node_dest = j
                     break
+
