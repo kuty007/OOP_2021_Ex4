@@ -5,7 +5,7 @@ import networkx as nx
 
 from Position import Position
 
-epsilon = 0.000001
+epsilon = 0.0000000000000001
 
 
 class Pokemon:

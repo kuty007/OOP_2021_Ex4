@@ -13,6 +13,7 @@ from load_data_from_server import *
 import networkx as nx
 from Position import Position
 from numpy import inf
+from Algo import *
 
 # init pygame
 WIDTH, HEIGHT = 1080, 720
@@ -27,13 +28,14 @@ clock = pygame.time.Clock()
 pygame.font.init()
 client = Client()
 client.start_connection(HOST, PORT)
+x = client.get_agents()
+print(x)
 graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
 pokemons = client.get_pokemons()
 pokemon_list = load_pokemon_list(pokemons, graph)
 
-
-print(pokemon_list)
+print(pokemon_list[0].node_src)
 graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
 
@@ -114,16 +116,18 @@ def draw_edges(graph):
 
 
 radius = 15
-
-client.add_agent("{\"id\":0}")
+start_pos = str(pokemon_list[0].node_src)
+print(start_pos)
+client.add_agent("{id:" + start_pos + "}")
 # client.add_agent("{\"id\":1}")
 # client.add_agent("{\"id\":2}")
 # client.add_agent("{\"id\":3}")
 # this commnad starts the server - the game is running now
 client.start()
-client.get_info()
-agents = client.get_agents()
-agent_list = load_agents_list(agents)
+x = client.get_agents()
+print(x)
+ag_list = load_agents_list(x)
+allocte_agents(graph, pokemon_list, ag_list)
 """
 The code below should be improved significantly:
 The GUI and the "algo" are mixed - refactoring using MVC design pattern is required.
@@ -158,8 +162,6 @@ while client.is_running() == 'true':
     draw_nodes(graph)
     draw_edges(graph)
 
-
-
     # draw agents
     for agent in agents:
         pygame.draw.circle(screen, Color(122, 61, 23),
@@ -175,12 +177,12 @@ while client.is_running() == 'true':
     # clock.tick(60)
 
     # choose next edge
-    for agent in agents:
+    for agent in ag_list:
         if agent.dest == -1:
-            next_node = (agent.src - 1) % len(graph.nodes)
+            agent.path_to_Pokemon.pop(0)
+            next_node = agent.path_to_Pokemon[0]
             client.choose_next_edge(
                 '{"agent_id":' + str(agent.id) + ', "next_node_id":' + str(next_node) + '}')
             ttl = client.time_to_end()
             print(ttl, client.get_info())
-
     client.move()

@@ -2,6 +2,8 @@ from Position import Position
 from Pokemon import Pokemon
 from numpy import inf
 import networkx as nx
+
+
 def allocte_agents(graph: nx.DiGraph, pok_list, agent_list):
     for pok in pok_list:
         min_time = inf
@@ -23,4 +25,5 @@ def allocte_agents(graph: nx.DiGraph, pok_list, agent_list):
                 path_add = temp_pat
         pok.alocte_agent = best_agent.id
         agent_list[agent_list.index(best_agent)].path_to_Pokemon.extend(path_add)
+        agent_list[agent_list.index(best_agent)].path_to_Pokemon.append(pok.node_dest)
 
