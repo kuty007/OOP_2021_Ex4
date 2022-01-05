@@ -2,8 +2,6 @@ from Position import Position
 from Pokemon import Pokemon
 from numpy import inf
 import networkx as nx
-
-
 def allocte_agents(graph: nx.DiGraph, pok_list, agent_list):
     for pok in pok_list:
         min_time = inf
