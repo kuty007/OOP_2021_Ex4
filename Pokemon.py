@@ -1,3 +1,4 @@
+import json
 import math
 
 import networkx as nx
@@ -8,7 +9,8 @@ epsilon = 0.000001
 
 
 class Pokemon:
-    def __init__(self, graph: nx.DiGraph(), value=0, type: int = 0, pos: Position = Position(), json_pok=None):
+    def __init__(self, graph: nx.DiGraph(), json_pok=None, value=0, type: int = 0, pos: Position = Position()):
+        self.alocte_agent = -1
         if json_pok is not None:
             self.load_pok(json_pok)
         else:

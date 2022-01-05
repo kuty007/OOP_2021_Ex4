@@ -31,7 +31,9 @@ graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
 pokemons = client.get_pokemons()
 pokemon_list = load_pokemon_list(pokemons, graph)
-print(pokemons)
+
+
+print(pokemon_list)
 graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
 
@@ -119,7 +121,9 @@ client.add_agent("{\"id\":0}")
 # client.add_agent("{\"id\":3}")
 # this commnad starts the server - the game is running now
 client.start()
-
+client.get_info()
+agents = client.get_agents()
+agent_list = load_agents_list(agents)
 """
 The code below should be improved significantly:
 The GUI and the "algo" are mixed - refactoring using MVC design pattern is required.
@@ -150,7 +154,7 @@ while client.is_running() == 'true':
 
     # refresh surface
     screen.fill(Color(0, 0, 0))
-    # draw nodes and edges
+    # draw nodes
     draw_nodes(graph)
     draw_edges(graph)
 

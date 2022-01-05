@@ -26,3 +26,10 @@ class Agent:
         self.value = json_agent_str['value']
         self.src = json_agent_str['src']
         self.dest = json_agent_str['dest']
+
+    def time_to_pokemon_src(self, graph: nx.DiGraph, pok: Pokemon):
+        src_id = self.src
+        dst_id = pok.node_src
+        path = nx.shortest_path(graph, src_id, dst_id, weight='weight')
+        dst = nx.shortest_path_length(graph, src_id, dst_id, weight='weight')
+        return path, dst, dst / self.speed
