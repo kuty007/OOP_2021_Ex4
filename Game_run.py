@@ -20,13 +20,42 @@ PORT = 6666
 HOST = '127.0.0.1'
 pygame.init()
 
+
+
 screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
+back = pygame.image.load('data/pokemons/background.png')
+back_top = screen.get_height() - back.get_height()
+back_left = screen.get_width()/2 - back.get_width()/2
+screen.blit(back, (back_left,back_top))
+
+
+myfont = pygame.font.SysFont('Comic Sans MS', 20)
+text = myfont.render('Score', False, (0, 0, 0))
+
+
+
+
+
 clock = pygame.time.Clock()
 pygame.font.init()
 client = Client()
 client.start_connection(HOST, PORT)
 pokemons = client.get_pokemons()
 pokemons_obj = json.loads(pokemons, object_hook=lambda d: SimpleNamespace(**d))
+
+pok_list = []
+P1 = pygame.image.load('data/pokemons/1.png').convert()
+pok_list.append(P1)
+P2 = pygame.image.load('data/pokemons/2.png').convert()
+pok_list.append(P2)
+
+pocImg = pygame.image.load('data/pokemons/1.png').convert()
+agImg = pygame.image.load('data/pokemons/agent.png')
+tit = pygame.image.load('data/pokemons/titel.png')
+
+screen.blit(back, (150,150))
+
+
 
 print(pokemons)
 
@@ -42,11 +71,19 @@ for n in graph.Nodes:
     x, y, _ = n.pos.split(',')
     n.pos = SimpleNamespace(x=float(x), y=float(y))
 
- # get data proportions
+# get data proportions
 min_x = min(list(graph.Nodes), key=lambda n: n.pos.x).pos.x
 min_y = min(list(graph.Nodes), key=lambda n: n.pos.y).pos.y
 max_x = max(list(graph.Nodes), key=lambda n: n.pos.x).pos.x
 max_y = max(list(graph.Nodes), key=lambda n: n.pos.y).pos.y
+
+
+def pocImage(x, y):
+   screen.blit(pygame.transform.scale(P1, (30, 30)), (x, y))
+
+
+def agImage(x, y):
+    screen.blit(pygame.transform.scale(agImg, (30, 30)), (x, y))
 
 
 def scale(data, min_screen, max_screen, min_data, max_data):
@@ -54,7 +91,7 @@ def scale(data, min_screen, max_screen, min_data, max_data):
     get the scaled data with proportions min_data, max_data
     relative to min and max screen dimentions
     """
-    return ((data - min_data) / (max_data-min_data)) * (max_screen - min_screen) + min_screen
+    return ((data - min_data) / (max_data - min_data)) * (max_screen - min_screen) + min_screen
 
 
 # decorate scale with the correct values
@@ -63,7 +100,7 @@ def my_scale(data, x=False, y=False):
     if x:
         return scale(data, 50, screen.get_width() - 50, min_x, max_x)
     if y:
-        return scale(data, 50, screen.get_height()-50, min_y, max_y)
+        return scale(data, 50, screen.get_height() - 50, min_y, max_y)
 
 
 radius = 15
@@ -102,23 +139,9 @@ while client.is_running() == 'true':
             exit(0)
 
     # refresh surface
-    screen.fill(Color(0, 0, 0))
-
-    # draw nodes
-    for n in graph.Nodes:
-        x = my_scale(n.pos.x, x=True)
-        y = my_scale(n.pos.y, y=True)
-
-        # its just to get a nice antialiased circle
-        gfxdraw.filled_circle(screen, int(x), int(y),
-                              radius, Color(64, 80, 174))
-        gfxdraw.aacircle(screen, int(x), int(y),
-                         radius, Color(255, 255, 255))
-
-        # draw the node id
-        id_srf = FONT.render(str(n.id), True, Color(255, 255, 255))
-        rect = id_srf.get_rect(center=(x, y))
-        screen.blit(id_srf, rect)
+    screen.blit(back, (back_left, back_top))
+    screen.blit(pygame.transform.scale(tit, (200, 100)), (150, 50))
+    screen.blit(myfont.render('Score+str(agent.value)', False, (0, 0, 0)), (0, 0))
 
     # draw edges
     for e in graph.Edges:
@@ -133,16 +156,32 @@ while client.is_running() == 'true':
         dest_y = my_scale(dest.pos.y, y=True)
 
         # draw the line
-        pygame.draw.line(screen, Color(61, 72, 126),
-                         (src_x, src_y), (dest_x, dest_y))
+        pygame.draw.line(screen, Color(64, 30, 116),
+                         (src_x, src_y), (dest_x, dest_y),7)
+
+        # draw nodes
+        for n in graph.Nodes:
+            x = my_scale(n.pos.x, x=True)
+            y = my_scale(n.pos.y, y=True)
+
+            # its just to get a nice antialiased circle
+            gfxdraw.filled_circle(screen, int(x), int(y),
+                                  radius, Color(64, 30, 116))
+            gfxdraw.aacircle(screen, int(x), int(y),
+                             radius, Color(0, 0, 0))
+
+            # draw the node id
+            id_srf = FONT.render(str(n.id), True, Color(255, 255, 255))
+            rect = id_srf.get_rect(center=(x, y))
+            screen.blit(id_srf, rect)
 
     # draw agents
     for agent in agents:
-        pygame.draw.circle(screen, Color(122, 61, 23),
-                           (int(agent.pos.x), int(agent.pos.y)), 10)
+        agImage(int(agent.pos.x), int(agent.pos.y))
+
     # draw pokemons (note: should differ (GUI wise) between the up and the down pokemons (currently they are marked in the same way).
     for p in pokemons:
-        pygame.draw.circle(screen, Color(0, 255, 255), (int(p.pos.x), int(p.pos.y)), 10)
+        pocImage(int(p.pos.x), int(p.pos.y))
 
     # update screen changes
     display.update()
@@ -155,7 +194,7 @@ while client.is_running() == 'true':
         if agent.dest == -1:
             next_node = (agent.src - 1) % len(graph.Nodes)
             client.choose_next_edge(
-                '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}')
+                '{"agent_id":' + str(agent.id) + ', "next_node_id":' + str(next_node) + '}')
             ttl = client.time_to_end()
             print(ttl, client.get_info())
 
