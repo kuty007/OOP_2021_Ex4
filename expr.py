@@ -169,7 +169,9 @@ while client.is_running() == 'true':
     # draw pokemons (note: should differ (GUI wise) between the up and the down pokemons (currently they are marked in the same way).
     for p in pokemons:
         pygame.draw.circle(screen, Color(0, 255, 255), (int(p.pos.x), int(p.pos.y)), 10)
-
+    ag_list = update_agents(ag_list, client)
+    pokemon_list = update_pokemons(pokemon_list, client, graph)
+    allocte_agents(graph, pokemon_list, ag_list)
     # update screen changes
     display.update()
 
@@ -178,11 +180,12 @@ while client.is_running() == 'true':
 
     # choose next edge
     for agent in ag_list:
-        if agent.dest == -1:
+        if agent.dest == -1 and len(agent.path_to_Pokemon) > 0:
             agent.path_to_Pokemon.pop(0)
-            next_node = agent.path_to_Pokemon[0]
-            client.choose_next_edge(
-                '{"agent_id":' + str(agent.id) + ', "next_node_id":' + str(next_node) + '}')
+            if len(agent.path_to_Pokemon) > 0:
+                next_node = agent.path_to_Pokemon[0]
+                client.choose_next_edge(
+                    '{"agent_id":' + str(agent.id) + ', "next_node_id":' + str(next_node) + '}')
             ttl = client.time_to_end()
             print(ttl, client.get_info())
     client.move()
