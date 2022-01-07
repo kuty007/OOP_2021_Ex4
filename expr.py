@@ -150,12 +150,13 @@ def draw_nodes(graph):
 
 
 radius = 15
-start_pos = str(pokemon_list[0].node_src)
-#start_pos2 = str(pokemon_list[1].node_src)
-#start_pos3 = str(pokemon_list[2].node_src)
-client.add_agent("{id:" + start_pos + "}")
-#client.add_agent("{id:" + start_pos2 + "}")
-#client.add_agent("{id:" + start_pos3 + "}")
+start_agents_pos(client, pokemon_list)
+#start_pos = str(pokemon_list[0].node_src)
+# start_pos2 = str(pokemon_list[1].node_src)
+# start_pos3 = str(pokemon_list[2].node_src)
+#client.add_agent("{id:" + start_pos + "}")
+# client.add_agent("{id:" + start_pos2 + "}")
+# client.add_agent("{id:" + start_pos3 + "}")
 # client.add_agent("{\"id\":3}")
 # this commnad starts the server - the game is running now
 client.start()
@@ -217,14 +218,13 @@ while client.is_running() == 'true':
     pokemon_list = update_pokemons(pokemon_list, client, graph)
     allocte_agents(graph, pokemon_list, ag_list)
     # print(ag_list[0].path_to_Pokemon)
-    print(pokemon_list[0])
+    # print(pokemon_list[0])
     # update screen changes
     display.update()
 
     #refresh rate
     #clock.tick(7)
     # choose next edge
-
     for agent in ag_list:
         if agent.dest == -1 and len(agent.path_to_Pokemon) > 0:
             agent.path_to_Pokemon.pop(0)

@@ -33,4 +33,5 @@ def load_pokemon_list(pokemon_json, graph: nx.DiGraph):
     x = len(pokemon_json["Pokemons"])
     for i in range(x):
         pokemon_list.append(Pokemon(graph, json_pok=pokemon_json["Pokemons"][i]["Pokemon"]))
+        pokemon_list.sort(key=lambda x: x.value, reverse=True)
     return pokemon_list

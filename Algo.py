@@ -84,3 +84,13 @@ def move_agents(pokemons_list, agent_list, client: Client):
             for pok in pokemons_list:
                 if agent.pos.distance(pok.pos) < eps:
                     client.move()
+
+
+def start_agents_pos(client: Client, pokemons_list):
+    x = json.loads(client.get_info())
+    num_of_agents = int(x["GameServer"]["agents"])
+    i = 0
+    while i < num_of_agents and i < len(pokemons_list):
+        start_pos = str(pokemons_list[i].node_src)
+        client.add_agent("{id:" + start_pos + "}")
+        i += 1
