@@ -19,7 +19,9 @@ class Agent:
             self.id = id
 
     def load_agent(self, json_agent_str):
-        """Function receives the agent string and load the values to the agent object """
+        """Function receives the agent string and load the values to the agent object
+
+         """
         self.pos = Position(location=json_agent_str['pos'])
         self.speed = json_agent_str['speed']
         self.id = json_agent_str['id']
@@ -28,8 +30,15 @@ class Agent:
         self.dest = json_agent_str['dest']
 
     def time_to_pokemon_src(self, graph: nx.DiGraph, pok: Pokemon):
-        src_id = self.src
+        """Function receives the agent graph and Pokemon and find the time
+        and path that will take to collect this  Pokemon  """
+        src_id_on_node = self.src
+        src_id_on_way = self.dest
         dst_id = pok.node_src
-        path = nx.shortest_path(graph, src_id, dst_id, weight='weight')
-        dst = nx.shortest_path_length(graph, src_id, dst_id, weight='weight')
+        if src_id_on_way == -1:
+            path = nx.shortest_path(graph, src_id_on_node, dst_id, weight='weight')
+            dst = nx.shortest_path_length(graph, src_id_on_node, dst_id, weight='weight')
+        else:
+            path = nx.shortest_path(graph,src_id_on_way, dst_id, weight='weight')
+            dst = nx.shortest_path_length(graph, src_id_on_way, dst_id, weight='weight')
         return path, dst, dst / self.speed

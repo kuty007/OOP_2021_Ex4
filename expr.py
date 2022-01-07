@@ -20,7 +20,6 @@ from Algo import *
 import pygame_widgets
 from pygame_widgets.button import Button
 
-
 # init pygame
 WIDTH, HEIGHT = 1080, 720
 # default port
@@ -32,8 +31,8 @@ pygame.init()
 screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
 back = pygame.image.load('data/pokemons/background.png')
 back_top = screen.get_height() - back.get_height()
-back_left = screen.get_width()/2 - back.get_width()/2
-screen.blit(back, (back_left,back_top))
+back_left = screen.get_width() / 2 - back.get_width() / 2
+screen.blit(back, (back_left, back_top))
 
 button_stop = Button(screen, 0, 0, 200, 40, text='Stop Game', inactiveColour=(255, 255, 255),
                      hoverColour=(255, 192, 203), font=pygame.font.SysFont('calibri', 30))
@@ -45,8 +44,8 @@ clock = pygame.time.Clock()
 pygame.font.init()
 client = Client()
 client.start_connection(HOST, PORT)
-x = client.get_agents()
-print(x)
+# x = client.get_agents()
+# print(x)
 graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
 pokemons = client.get_pokemons()
@@ -61,8 +60,7 @@ pocImg = pygame.image.load('data/pokemons/1.png').convert()
 agImg = pygame.image.load('data/pokemons/agent.png')
 tit = pygame.image.load('data/pokemons/titel.png')
 
-
-print(pokemon_list[0].node_src)
+# print(pokemon_list[0].node_src)
 graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
 
@@ -71,8 +69,6 @@ FONT = pygame.font.SysFont('Arial', 20, bold=True)
 
 # load the json string into SimpleNamespace Object
 # get data proportions
-
-
 
 
 def scale_data():
@@ -97,12 +93,14 @@ def scale_data():
 
 max_x, min_x, max_y, min_y = scale_data()
 
+
 def pocImage(x, y):
-   screen.blit(pygame.transform.scale(P1, (30, 30)), (x, y))
+    screen.blit(pygame.transform.scale(P1, (30, 30)), (x, y))
 
 
 def agImage(x, y):
     screen.blit(pygame.transform.scale(agImg, (30, 30)), (x, y))
+
 
 def scale(data, min_screen, max_screen, min_data, max_data):
     """
@@ -120,6 +118,7 @@ def my_scale(data, x=False, y=False):
     if y:
         return scale(data, 50, screen.get_height() - 50, min_y, max_y)
 
+
 def draw_edges(graph):
     for edge in graph.edges:
         # find the edge nodes
@@ -133,6 +132,7 @@ def draw_edges(graph):
         # draw the line
         pygame.draw.line(screen, Color(64, 30, 116),
                          (src_x, src_y), (dest_x, dest_y), 7)
+
 
 def draw_nodes(graph):
     for i in graph.nodes:
@@ -149,13 +149,13 @@ def draw_nodes(graph):
         screen.blit(id_srf, rect)
 
 
-
 radius = 15
 start_pos = str(pokemon_list[0].node_src)
-print(start_pos)
+#start_pos2 = str(pokemon_list[1].node_src)
+#start_pos3 = str(pokemon_list[2].node_src)
 client.add_agent("{id:" + start_pos + "}")
-# client.add_agent("{\"id\":1}")
-# client.add_agent("{\"id\":2}")
+#client.add_agent("{id:" + start_pos2 + "}")
+#client.add_agent("{id:" + start_pos3 + "}")
 # client.add_agent("{\"id\":3}")
 # this commnad starts the server - the game is running now
 client.start()
@@ -199,7 +199,7 @@ while client.is_running() == 'true':
     # refresh surface
     screen.blit(back, (back_left, back_top))
     screen.blit(pygame.transform.scale(tit, (230, 80)), (800, 580))
-    screen.blit(myfont.render('Score+str(agent.value)', False, (0, 0, 0)), (200, 0))    # draw nodes
+    screen.blit(myfont.render('Score+str(agent.value)', False, (0, 0, 0)), (200, 0))  # draw nodes
     draw_edges(graph)
     draw_nodes(graph)
     button_stop.draw()
@@ -216,13 +216,14 @@ while client.is_running() == 'true':
     ag_list = update_agents(ag_list, client)
     pokemon_list = update_pokemons(pokemon_list, client, graph)
     allocte_agents(graph, pokemon_list, ag_list)
+    # print(ag_list[0].path_to_Pokemon)
+    print(pokemon_list[0])
     # update screen changes
     display.update()
 
-    # refresh rate
-    # clock.tick(60)
+    #refresh rate
+    #clock.tick(7)
     # choose next edge
-
 
     for agent in ag_list:
         if agent.dest == -1 and len(agent.path_to_Pokemon) > 0:
@@ -233,4 +234,6 @@ while client.is_running() == 'true':
                     '{"agent_id":' + str(agent.id) + ', "next_node_id":' + str(next_node) + '}')
             ttl = client.time_to_end()
             print(ttl, client.get_info())
+    pygame.time.wait(90)
     client.move()
+    #move_agents(pokemon_list, ag_list, client)

@@ -34,3 +34,6 @@ class Position:
 
     def distance(self, p1) -> float:
         return math.sqrt((self.x - p1.x) ** 2 + (self.y - p1.y) ** 2)
+
+    def __repr__(self):
+        return f"repr x pos:{self.get_x()}  y pos:{self.get_y()}  z pos:{self.get_z()} "

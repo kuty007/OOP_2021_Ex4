@@ -27,7 +27,7 @@ def load_agents_list(agents_json):
 
 
 def load_pokemon_list(pokemon_json, graph: nx.DiGraph):
-    """load allPokemons from json string that we get from the server into list """
+    """load all Pokemons from json string that we get from the server into list """
     pokemon_list = []
     pokemon_json = json.loads(pokemon_json)
     x = len(pokemon_json["Pokemons"])

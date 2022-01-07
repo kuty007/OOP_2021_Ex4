@@ -28,6 +28,8 @@ class Pokemon:
         self.pos = Position(location=json_pok['pos'])
 
     def on_edge_pokemon(self, graph: nx.DiGraph):
+        """Function receives the pokemon  and finds the edge he placed on
+        than set is values of node_src & node_dest to the edge start node and dst node """
         for i, j, k in graph.edges(data=""):
             len_edge = graph.nodes[i]['pos'].distance(graph.nodes[j]['pos'])
             pok_to_src = graph.nodes[i]['pos'].distance(self.pos)
@@ -41,3 +43,7 @@ class Pokemon:
                     self.node_src = i
                     self.node_dest = j
                     break
+
+    def __repr__(self):
+        return f"repr alocte_agent:{self.alocte_agent} value:{self.value} type:{self.type} " \
+        f"node_src:{self.node_src}  node_dest:{self.node_dest} pos:{self.pos}"
