@@ -48,6 +48,20 @@ def allocte_agents(graph: nx.DiGraph, pok_list, agent_list):
             agent_.path_to_Pokemon = new_path
 
 
+def free_agents(graph: nx.DiGraph, agent_list, pok: Pokemon):
+    min_time = inf
+    path = 0
+    best_agent = agent_list[0]
+    for agent in agent_list:
+        if not agent.path_to_Pokemon:
+            temp_path = agent.time_to_pokemon_src(graph, pok)
+            if temp_path[2] < min_time:
+                min_time = temp_path[2]
+                path = temp_path
+                best_agent = agent
+    return best_agent, path[0]
+
+
 def update_agents(start_agent_list, client: Client):
     new_agent_list = load_agents_list(client.get_agents())
     for i in range(len(new_agent_list)):
