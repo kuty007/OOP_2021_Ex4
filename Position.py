@@ -2,7 +2,6 @@ import math
 
 
 class Position:
-
     def __init__(self, location: str = None):
         if location is not None:
             location = location.split(',')

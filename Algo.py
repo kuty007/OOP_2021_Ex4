@@ -5,45 +5,6 @@ from load_data_from_server import *
 eps = 0.01
 
 
-# def allocte_agents(graph: nx.DiGraph, pok_list, agent_list):
-#     for pok in pok_list:
-#         if pok.alocte_agent == -1:
-#             min_time = inf
-#             path_add = []
-#             best_agent = -1
-#             for agent in agent_list:
-#                 if agent.dest == pok.node_dest and agent.pos.distance(pok.pos) < eps:
-#                     return
-#                 elif len(agent.path_to_Pokemon) < 1:
-#                     temp_path = agent.time_to_pokemon_src(graph, pok)
-#                     temp_pat = temp_path[0]
-#                     temp_time = temp_path[2]
-#                 else:
-#                     temp_time = agent.time_to_pokemon_src(graph, pok)[2] + (
-#                             nx.shortest_path_length(graph, agent.src, agent.path_to_Pokemon[-1],
-#                                                     weight='weight') / agent.speed)
-#                     temp_pat = nx.shortest_path(graph, agent.path_to_Pokemon[-1], pok.node_src)
-#                 if temp_time < min_time:
-#                     min_time = temp_time
-#                     best_agent = agent
-#                     path_add = temp_pat
-#             pok.alocte_agent = best_agent.id
-#             agent_ = agent_list[agent_list.index(best_agent)]
-#             path_len = len(best_agent.path_to_Pokemon)
-#             if path_len >= 2:
-#                 for i in range(path_len - 1):
-#                     if best_agent.path_to_Pokemon[i] == pok.node_src and best_agent.path_to_Pokemon[
-#                         i + 1] == pok.node_dest:
-#                         return
-#             agent_.path_to_Pokemon.extend(path_add)
-#             agent_.path_to_Pokemon.append(pok.node_dest)
-#             new_path = [agent_.path_to_Pokemon[0]]
-#             for i in range(1, len(agent_.path_to_Pokemon)):
-#                 if agent_.path_to_Pokemon[i] != agent_.path_to_Pokemon[i - 1]:
-#                     new_path.append(agent_.path_to_Pokemon[i])
-#             agent_.path_to_Pokemon = new_path
-
-
 def allocate_agents(graph: nx.DiGraph, pok_list, agent_list):
     """Function receives the agents list,graph and Pokemons list and allocate for each Pokemon an agent
     first check if the agent is close to the pokemon if so return.
@@ -137,6 +98,7 @@ def update_pokemons(start_pokemons_list, client: Client, graph: nx.DiGraph):
     return start_pokemons_list
 
 
+# not working at this moment
 def move_agents(pokemons_list, agent_list, client: Client, graph: nx.DiGraph):
     for agent in agent_list:
         if agent.dest != -1:

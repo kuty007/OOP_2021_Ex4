@@ -5,7 +5,7 @@ import networkx as nx
 
 from Position import Position
 
-epsilon = 0.0000000000000001
+epsilon = 0.0000000000001
 
 
 class Pokemon:
@@ -17,7 +17,7 @@ class Pokemon:
             self.value = value  # double value
             self.type = type  # -1 or 1
             self.pos = pos  # Position Class
-        self.node_src = None  # src node of  the edge that the Pokemon placed on
+        self.node_src = None  # src node of the edge that the Pokemon placed on
         self.node_dest = None  # dst node of the edge that the Pokemon placed on
         self.on_edge_pokemon(graph)
 
