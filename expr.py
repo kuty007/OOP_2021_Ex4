@@ -55,7 +55,6 @@ P2 = pygame.image.load('data/pokemons/3.png').convert()
 pocImg = pygame.image.load('data/pokemons/1.png').convert()
 agImg = pygame.image.load('data/pokemons/agent.png')
 tit = pygame.image.load('data/pokemons/titel.png')
-
 # print(pokemon_list[0].node_src)
 graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
@@ -146,7 +145,7 @@ client.start()
 x = client.get_agents()
 # print(x)
 ag_list = load_agents_list(x)
-allocte_agents2(graph, pokemon_list, ag_list)
+allocte_agents(graph, pokemon_list, ag_list)
 """
 The code below should be improved significantly:
 The GUI and the "algo" are mixed - refactoring using MVC design pattern is required.
@@ -206,17 +205,16 @@ while client.is_running() == 'true':
 
     ag_list = update_agents(ag_list, client)
     pokemon_list = update_pokemons(pokemon_list, client, graph)
-    allocte_agents2(graph, pokemon_list, ag_list)
+    allocte_agents(graph, pokemon_list, ag_list)
     print(ag_list[0])
     # print(ag_list[0].path_to_Pokemon)
     # print(pokemon_list[0])
     # update screen changes
     display.update()
     # refresh rate
-    clock.tick(60)
+    #clock.tick(60)
     # choose next edge
     chose_next_edge(ag_list, client)
-    pygame.time.wait(92)
+    pygame.time.wait(90)
     client.move()
-
     #move_agents(pokemon_list, ag_list, client, graph)
