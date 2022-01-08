@@ -32,7 +32,7 @@ screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
 back = pygame.image.load('data/pokemons/background.png')
 back_top = screen.get_height() - back.get_height()
 back_left = screen.get_width() / 2 - back.get_width() / 2
-screen.blit(back, (back_left, back_top))
+screen.blit(back, (back_top, back_left))
 
 button_stop = Button(screen, 0, 0, 200, 40, text='Stop Game', inactiveColour=(255, 255, 255),
                      hoverColour=(255, 192, 203), font=pygame.font.SysFont('calibri', 30))
@@ -50,11 +50,8 @@ graph_json = client.get_graph()
 graph = load_graph_json(graph_json)
 pokemons = client.get_pokemons()
 pokemon_list = load_pokemon_list(pokemons, graph)
-pok_list = []
 P1 = pygame.image.load('data/pokemons/1.png').convert()
-pok_list.append(P1)
-P2 = pygame.image.load('data/pokemons/2.png').convert()
-pok_list.append(P2)
+P2 = pygame.image.load('data/pokemons/3.png').convert()
 
 pocImg = pygame.image.load('data/pokemons/1.png').convert()
 agImg = pygame.image.load('data/pokemons/agent.png')
@@ -94,8 +91,6 @@ def scale_data():
 max_x, min_x, max_y, min_y = scale_data()
 
 
-def pocImage(x, y):
-    screen.blit(pygame.transform.scale(P1, (30, 30)), (x, y))
 
 
 def agImage(x, y):
@@ -187,32 +182,42 @@ while client.is_running() == 'true':
         a.pos = SimpleNamespace(x=my_scale(
             float(x), x=True), y=my_scale(float(y), y=True))
     # check events
-    events = pygame.event.get()
-    for event in events:
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit(0)
-        if button_stop.clicked:
-            client.stop()
-            pygame.quit()
-            exit(0)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if button_stop.clicked(event.pos):
+                pygame.quit()
+                exit(0)
+
+
 
     # refresh surface
     screen.blit(back, (back_left, back_top))
     screen.blit(pygame.transform.scale(tit, (230, 80)), (800, 580))
-    screen.blit(myfont.render('Score+str(agent.value)', False, (0, 0, 0)), (200, 0))  # draw nodes
+    info_data = json.loads(client.get_info())
+
+    screen.blit(myfont.render('Score: '+str(info_data["GameServer"]["moves"]), False, (0, 0, 0)), (0, 40))
+    screen.blit(myfont.render('Time to end: '+str(int(client.time_to_end())//1000)+' sec', False, (0, 0, 0)), (0, 60))
+
+
+
     draw_edges(graph)
     draw_nodes(graph)
     button_stop.draw()
     button_stop.listen(events)
 
-    # draw agents
+    ########## Draw Agents ############
     for agent in agents:
-        agImage(int(agent.pos.x), int(agent.pos.y))
+        screen.blit(pygame.transform.scale(agImg, (30, 30)), (int(agent.pos.x), int(agent.pos.y)))
 
-    # draw pokemons (note: should differ (GUI wise) between the up and the down pokemons (currently they are marked in the same way).
+    ########## Draw Pokemons ############
     for p in pokemons:
-        pocImage(int(p.pos.x), int(p.pos.y))
+        if(p.type<0): #Different pok to any type (-1,1)
+            screen.blit(pygame.transform.scale(P1, (30, 30)), (int(p.pos.x), int(p.pos.y)))
+        else:
+            screen.blit(pygame.transform.scale(P2, (30, 30)), (int(p.pos.x), int(p.pos.y)))
 
     ag_list = update_agents(ag_list, client)
     pokemon_list = update_pokemons(pokemon_list, client, graph)
