@@ -46,12 +46,13 @@ eps = 0.01
 
 def allocate_agents(graph: nx.DiGraph, pok_list, agent_list):
     """Function receives the agents list,graph and Pokemons list and allocate for each Pokemon an agent
-    first check if the agent is close to the pokemon if so return
+    first check if the agent is close to the pokemon if so return.
 
     second check if thre is free agent and if so assign him to this pokemon and add the path to collect
-    this pokemon to the agent
+    this pokemon to the agent path_to_Pokemon.
 
-    third find the agent who will collect the pokemon the fastest
+    third find the agent who will collect the pokemon the fastest.
+    assign him to this pokemon and add the path to collect this pokemon to the agent path_to_Pokemon.
     """
     for pok in pok_list:
         if pok.alocte_agent == -1:
