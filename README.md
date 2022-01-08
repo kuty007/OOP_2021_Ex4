@@ -1,1 +1,2 @@
-# OOP_2021_Ex4
+# OOP_2021_Ex4 - Pokemon game
+### In this work we implemented a simple Pokemon game. The game is played by connecting a client to the server, receiving information from the server such as: the graph structure, the location of the Pokemon, the amount and speed of the agents and more. On our side we have implemented algorithms to optimize the performance of the agents in the most effective piece of Pokemon in Tire and
