@@ -39,6 +39,10 @@ class Agent:
             path = nx.shortest_path(graph, src_id_on_node, dst_id, weight='weight')
             dst = nx.shortest_path_length(graph, src_id_on_node, dst_id, weight='weight')
         else:
-            path = nx.shortest_path(graph,src_id_on_way, dst_id, weight='weight')
+            path = nx.shortest_path(graph, src_id_on_way, dst_id, weight='weight')
             dst = nx.shortest_path_length(graph, src_id_on_way, dst_id, weight='weight')
         return path, dst, dst / self.speed
+
+    def __repr__(self):
+        return f"repr path_to_Pokemon:{self.path_to_Pokemon} value:{self.value} id:{self.id} " \
+               f"node_src:{self.src}  node_dest:{self.dest} pos:{self.pos}"
