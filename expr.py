@@ -145,7 +145,7 @@ client.start()
 x = client.get_agents()
 # print(x)
 ag_list = load_agents_list(x)
-allocte_agents(graph, pokemon_list, ag_list)
+allocate_agents(graph, pokemon_list, ag_list)
 """
 The code below should be improved significantly:
 The GUI and the "algo" are mixed - refactoring using MVC design pattern is required.
@@ -205,7 +205,7 @@ while client.is_running() == 'true':
 
     ag_list = update_agents(ag_list, client)
     pokemon_list = update_pokemons(pokemon_list, client, graph)
-    allocte_agents(graph, pokemon_list, ag_list)
+    allocate_agents(graph, pokemon_list, ag_list)
     print(ag_list[0])
     # print(ag_list[0].path_to_Pokemon)
     # print(pokemon_list[0])

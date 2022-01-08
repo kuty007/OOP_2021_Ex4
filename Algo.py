@@ -44,7 +44,15 @@ eps = 0.01
 #             agent_.path_to_Pokemon = new_path
 
 
-def allocte_agents(graph: nx.DiGraph, pok_list, agent_list):
+def allocate_agents(graph: nx.DiGraph, pok_list, agent_list):
+    """Function receives the agents list,graph and Pokemons list and allocate for each Pokemon an agent
+    first check if the agent is close to the pokemon if so return
+
+    second check if thre is free agent and if so assign him to this pokemon and add the path to collect
+    this pokemon to the agent
+
+    third find the agent who will collect the pokemon the fastest
+    """
     for pok in pok_list:
         if pok.alocte_agent == -1:
             min_time = inf
@@ -79,14 +87,16 @@ def allocte_agents(graph: nx.DiGraph, pok_list, agent_list):
                         return
             agent_.path_to_Pokemon.extend(path_add)
             agent_.path_to_Pokemon.append(pok.node_dest)
-            new_path = [agent_.path_to_Pokemon[0]]
-            for i in range(1, len(agent_.path_to_Pokemon)):
-                if agent_.path_to_Pokemon[i] != agent_.path_to_Pokemon[i - 1]:
-                    new_path.append(agent_.path_to_Pokemon[i])
-            agent_.path_to_Pokemon = new_path
+            # new_path = [agent_.path_to_Pokemon[0]]
+            # for i in range(1, len(agent_.path_to_Pokemon)):
+            #     if agent_.path_to_Pokemon[i] != agent_.path_to_Pokemon[i - 1]:
+            #         new_path.append(agent_.path_to_Pokemon[i])
+            # agent_.path_to_Pokemon = new_path
 
 
 def free_agents(graph: nx.DiGraph, agent_list, pok: Pokemon):
+    """Function receives the agents list,graph and Pokemon and find from the unbusy agents who will
+    collect the Pokemon in the fastest time"""
     min_time = inf
     path = -1
     best_agent = -1
@@ -103,6 +113,8 @@ def free_agents(graph: nx.DiGraph, agent_list, pok: Pokemon):
 
 
 def update_agents(start_agent_list, client: Client):
+    """Function receives the agents list and client load the agents new values from the client and
+     update the agents in the agents list accordingly  """
     new_agent_list = load_agents_list(client.get_agents())
     for i in range(len(new_agent_list)):
         exsist_path = start_agent_list[i].path_to_Pokemon
@@ -112,6 +124,8 @@ def update_agents(start_agent_list, client: Client):
 
 
 def update_pokemons(start_pokemons_list, client: Client, graph: nx.DiGraph):
+    """Function receives the pokemons_list and client load the new pokemons from the client and
+         update the pokemons_list accordingly  """
     new_pokemons_list = load_pokemon_list(client.get_pokemons(), graph)
     for pok in new_pokemons_list:
         for oldpok in start_pokemons_list:
@@ -134,6 +148,8 @@ def move_agents(pokemons_list, agent_list, client: Client, graph: nx.DiGraph):
 
 
 def chose_next_edge(agent_list, client: Client):
+    """Function receives the agents list and client send massage to server using
+    client.choose_next_edge with each agent next edge """
     for agent in agent_list:
         if agent.dest == -1 and len(agent.path_to_Pokemon) > 0:
             agent.path_to_Pokemon.pop(0)
@@ -145,6 +161,9 @@ def chose_next_edge(agent_list, client: Client):
 
 
 def start_agents_pos(client: Client, pokemons_list):
+    """Function receives pokemons_list and client find out how many agents are in this
+    stage and then locate them on the Pokémons src node
+     """
     x = json.loads(client.get_info())
     num_of_agents = int(x["GameServer"]["agents"])
     i = 0
