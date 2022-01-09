@@ -14,6 +14,7 @@ This project is an final assignment in an object-oriented course at Ariel Univer
 In this project we implemented a simple Pokemon game. The game is running by a simle server, and a client that receiving information from the server such as: graph structure, location of the Pokemon, the amount and speed of the agents and more. On our side we have implemented algorithms to optimize the agents work by efective allocation to pokemons. Also we build a pygame design to the client side.
 
 ## Creating and Implementing Directed Weighted Graph Theory.
+In this assignment we based our graph on Phyton
 
 
 
