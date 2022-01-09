@@ -88,6 +88,16 @@ agent next edge
 start_agents_pos: receives pokemons_list and client find out how many agents are in this stage and then locate
 them on the Pokémons src node
 
+### PokemonGame
+This class is used to draw the game this class gets all the information from the Controller and
+
+use it to draw the changes in the game in real time.
+
+
+We use this class to run the game
+
+
+
 # UML
 
 ## For more information please visit our [WIKI pages](../../wiki)
