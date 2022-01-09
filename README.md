@@ -118,6 +118,26 @@ assign him to this pokemon and add the path to collect this pokemon to the agent
 # UML
 ![UML](https://user-images.githubusercontent.com/73474039/148698948-edc938d1-5fc5-44ed-902a-b256fea43f2b.jpg)
 
+# Results
+| **Case**   | **Graph**   | **Pokemons** | **Time**   | **Agents**  | **Grade** | **Moves** |
+|------------|-------------|--------------|------------|-------------|-----------|-----------|
+| 0          | A0          |  1           |  30 sec    |  1          | 140       | 300       |
+| 1          | A0          |  2           |  1 min     |  1          | 349       | 599       |
+| 2          | A0          |  3           |  30 sec    |  1          | 256       | 300       |
+| 3          | A0          |  4           |  1 min     |  1          | 624       | 598       |
+| 4          | A1          |  5           |  30 sec    |  1          | 284       | 178       |
+| 5          | A1          |  6           |  1 min     |  1          | 550       | 571       |
+| 6          | A1          |  1           |  30 sec    |  1          | 79        | 289       |
+| 7          | A1          |  2           |  1 min     |  1          | 249       | 574       |
+| 8          | A2          |  3           |  30 sec    |  1          | 40        | 260       |
+| 9          | A2          |  4           |  1 min     |  1          | 236       | 529       |
+| 10         | A2          |  5           |  30 sec    |  1          | 47        | 260       |
+| 11         | A2          |  6           |  1 min     |  3          | 1129      | 585       |
+| 12         | A3          |  1           |  30 sec    |  1          | 40        | 252       |
+| 13         | A3          |  2           |  1 min     |  2          | 152       | 501       |
+| 14         | A3          |  3           |  30 sec    |  3          | 152       | 249       |
+| 15         | A3          |  4           |  1 min     |  1          | 229       | 496       |
+
 
 ## For more information please visit our [WIKI pages](../../wiki)
 
