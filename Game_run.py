@@ -1,89 +1,13 @@
-"""
-@author AchiyaZigi
-OOP - Ex4
-Very simple GUI example for python client to communicates with the server and "play the game!"
-"""
-from types import SimpleNamespace
-from client import Client
-import json
+
+from Game_Controller import Controller
+from asyncio import events
 from pygame import gfxdraw
 import pygame
 from pygame import *
-import networkx as nx
-from Position import Position
-
-# init pygame
+from Algo import *
+from pygame_widgets.button import Button
 WIDTH, HEIGHT = 1080, 720
-# default port
-PORT = 6666
-# server host (default localhost 127.0.0.1)
-HOST = '127.0.0.1'
-pygame.init()
-
-
-
-screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
-back = pygame.image.load('data/pokemons/background.png')
-back_top = screen.get_height() - back.get_height()
-back_left = screen.get_width()/2 - back.get_width()/2
-screen.blit(back, (back_left,back_top))
-
-
-myfont = pygame.font.SysFont('Comic Sans MS', 20)
-text = myfont.render('Score', False, (0, 0, 0))
-
-
-
-
-
-clock = pygame.time.Clock()
-pygame.font.init()
-client = Client()
-client.start_connection(HOST, PORT)
-pokemons = client.get_pokemons()
-pokemons_obj = json.loads(pokemons, object_hook=lambda d: SimpleNamespace(**d))
-
-pok_list = []
-P1 = pygame.image.load('data/pokemons/1.png').convert()
-pok_list.append(P1)
-P2 = pygame.image.load('data/pokemons/2.png').convert()
-pok_list.append(P2)
-
-pocImg = pygame.image.load('data/pokemons/1.png').convert()
-agImg = pygame.image.load('data/pokemons/agent.png')
-tit = pygame.image.load('data/pokemons/titel.png')
-
-screen.blit(back, (150,150))
-
-
-
-print(pokemons)
-
-graph_json = client.get_graph()
-
-FONT = pygame.font.SysFont('Arial', 20, bold=True)
-# load the json string into SimpleNamespace Object
-
-graph = json.loads(
-    graph_json, object_hook=lambda json_dict: SimpleNamespace(**json_dict))
-
-for n in graph.Nodes:
-    x, y, _ = n.pos.split(',')
-    n.pos = SimpleNamespace(x=float(x), y=float(y))
-
-# get data proportions
-min_x = min(list(graph.Nodes), key=lambda n: n.pos.x).pos.x
-min_y = min(list(graph.Nodes), key=lambda n: n.pos.y).pos.y
-max_x = max(list(graph.Nodes), key=lambda n: n.pos.x).pos.x
-max_y = max(list(graph.Nodes), key=lambda n: n.pos.y).pos.y
-
-
-def pocImage(x, y):
-   screen.blit(pygame.transform.scale(P1, (30, 30)), (x, y))
-
-
-def agImage(x, y):
-    screen.blit(pygame.transform.scale(agImg, (30, 30)), (x, y))
+radius = 15
 
 
 def scale(data, min_screen, max_screen, min_data, max_data):
@@ -94,109 +18,160 @@ def scale(data, min_screen, max_screen, min_data, max_data):
     return ((data - min_data) / (max_data - min_data)) * (max_screen - min_screen) + min_screen
 
 
-# decorate scale with the correct values
+# P1 = pygame.image.load('data/pokemons/1.png').convert()
+# P2 = pygame.image.load('data/pokemons/3.png').convert()
+# pocImg = pygame.image.load('data/pokemons/1.png').convert()
+# agImg = pygame.image.load('data/pokemons/agent.png')
+# tit = pygame.image.load('data/pokemons/titel.png')
+# FONT = pygame.font.SysFont('Arial', 20, bold=True)
 
-def my_scale(data, x=False, y=False):
-    if x:
-        return scale(data, 50, screen.get_width() - 50, min_x, max_x)
-    if y:
-        return scale(data, 50, screen.get_height() - 50, min_y, max_y)
 
+class PokemonGame:
+    def __init__(self):
+        control = Controller()
+        self.graph = control.graph
+        self.pokemons = control.pokemons
+        self.agents = control.agents
+        pygame.init()
+        self.screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
+        self.max_x, self.min_x, self.max_y, self.min_y = self.scale_data()
+        back = pygame.image.load('data/pokemons/background.png')
+        back_top = self.screen.get_height() - back.get_height()
+        back_left = self.screen.get_width() / 2 - back.get_width() / 2
+        self.screen.blit(back, (back_top, back_left))
+        button_stop = Button(self.screen, 0, 0, 200, 40, text='Stop Game', inactiveColour=(255, 255, 255),
+                             hoverColour=(255, 192, 203), font=pygame.font.SysFont('calibri', 30))
+        myfont = pygame.font.SysFont('Comic Sans MS', 20)
+        text = myfont.render('Score', False, (0, 0, 0))
+        clock = pygame.time.Clock()
+        self.P1 = pygame.image.load('data/pokemons/1.png').convert()
+        self.P2 = pygame.image.load('data/pokemons/3.png').convert()
+        pocImg = pygame.image.load('data/pokemons/1.png').convert()
+        self.agImg = pygame.image.load('data/pokemons/agent.png')
+        tit = pygame.image.load('data/pokemons/titel.png')
+        FONT = pygame.font.SysFont('Arial', 20, bold=True)
+        control.set_start()
+        self.agents = control.agents
+        self.pokemons = control.pokemons
+        # start = time.time()
+        # draw as long as there is a connection to the server
+        while control.is_run():
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(0)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if button_stop.clicked(event.pos):
+                        pygame.quit()
+                        exit(0)
+            self.screen.blit(back, (back_left, back_top))
+            self.screen.blit(pygame.transform.scale(tit, (230, 80)), (800, 580))
+            info_data = json.loads(control.client.get_info())
+            self.screen.blit(myfont.render('Score: ' + str(info_data["GameServer"]["grade"]), False, (0, 0, 0)),
+                             (0, 40))
+            self.screen.blit(
+                myfont.render('Time to end: ' + str(int(control.client.time_to_end()) // 1000) + ' sec', False,
+                              (0, 0, 0)),
+                (0, 60))
+            self.screen.blit(myfont.render('Moves: ' + str(info_data["GameServer"]["moves"]), False, (0, 0, 0)),
+                             (0, 80))
+            ########## Draw Graph ############
+            self.draw_edges()
+            self.draw_nodes()
+            button_stop.draw()
+            button_stop.listen(events)
+            self.draw_agents()
+            ########## Draw Pokemons ############
+            self.draw_pokemons()
+            # for i in self.agents:
+            #     if i.dest != -1:
+            #         self.agents = control.update_agents(self.agents, control.client)
+            #         break
+            self.agents = control.update_agents(self.agents, control.client)
+            self.pokemons = control.update_pokemons(self.pokemons, control.client, self.graph)
+            control.allocate_agents(self.graph, self.pokemons, self.agents)
+            # update screen changes
+            display.update()
+            # refresh rate
+            # clock.tick()
+            # choose next edge
+            chose_next_edge(self.agents, control.client)
+            pygame.time.wait(85)
+            control.client.move()
 
-radius = 15
+    def scale_data(self):
+        gr = self.graph
+        x_min = inf
+        x_max = -inf
+        y_min = inf
+        y_max = -inf
+        for i in gr.nodes:
+            loction = gr.nodes.get(i).get('pos')
+            if loction.get_x() > x_max:
+                x_max = loction.get_x()
+            if loction.get_x() < x_min:
+                x_min = loction.get_x()
+            if loction.get_y() > y_max:
+                y_max = loction.get_y()
+            if loction.get_y() < y_min:
+                y_min = loction.get_y()
 
-client.add_agent("{\"id\":0}")
-# client.add_agent("{\"id\":1}")
-# client.add_agent("{\"id\":2}")
-# client.add_agent("{\"id\":3}")
-# this commnad starts the server - the game is running now
-client.start()
+        return x_max, x_min, y_max, y_min
 
-"""
-The code below should be improved significantly:
-The GUI and the "algo" are mixed - refactoring using MVC design pattern is required.
-"""
+    def agImage(self, x, y):
+        self.screen.blit(pygame.transform.scale(self.agImg, (30, 30)), (x, y))
 
-while client.is_running() == 'true':
-    pokemons = json.loads(client.get_pokemons(),
-                          object_hook=lambda d: SimpleNamespace(**d)).Pokemons
-    pokemons = [p.Pokemon for p in pokemons]
-    for p in pokemons:
-        x, y, _ = p.pos.split(',')
-        p.pos = SimpleNamespace(x=my_scale(
-            float(x), x=True), y=my_scale(float(y), y=True))
-    agents = json.loads(client.get_agents(),
-                        object_hook=lambda d: SimpleNamespace(**d)).Agents
-    agents = [agent.Agent for agent in agents]
-    for a in agents:
-        x, y, _ = a.pos.split(',')
-        a.pos = SimpleNamespace(x=my_scale(
-            float(x), x=True), y=my_scale(float(y), y=True))
-    # check events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit(0)
+    # decorate scale with the correct values
 
-    # refresh surface
-    screen.blit(back, (back_left, back_top))
-    screen.blit(pygame.transform.scale(tit, (200, 100)), (150, 50))
-    screen.blit(myfont.render('Score+str(agent.value)', False, (0, 0, 0)), (0, 0))
+    def my_scale(self, data, x=False, y=False):
+        if x:
+            return scale(data, 50, self.screen.get_width() - 50, self.min_x, self.max_x)
+        if y:
+            return scale(data, 50, self.screen.get_height() - 50, self.min_y, self.max_y)
 
-    # draw edges
-    for e in graph.Edges:
-        # find the edge nodes
-        src = next(n for n in graph.Nodes if n.id == e.src)
-        dest = next(n for n in graph.Nodes if n.id == e.dest)
+    def draw_edges(self):
+        for edge in self.graph.edges:
+            # find the edge nodes
+            src_pos = self.graph.nodes.get(edge[0]).get('pos')
+            dest_pos = self.graph.nodes.get(edge[1]).get('pos')
+            # scaled positions
+            src_x = self.my_scale(src_pos.get_x(), x=True)
+            src_y = self.my_scale(src_pos.get_y(), y=True)
+            dest_x = self.my_scale(dest_pos.get_x(), x=True)
+            dest_y = self.my_scale(dest_pos.get_y(), y=True)
+            # draw the line
+            pygame.draw.line(self.screen, Color(64, 30, 116),
+                             (src_x, src_y), (dest_x, dest_y), 7)
 
-        # scaled positions
-        src_x = my_scale(src.pos.x, x=True)
-        src_y = my_scale(src.pos.y, y=True)
-        dest_x = my_scale(dest.pos.x, x=True)
-        dest_y = my_scale(dest.pos.y, y=True)
-
-        # draw the line
-        pygame.draw.line(screen, Color(64, 30, 116),
-                         (src_x, src_y), (dest_x, dest_y),7)
-
-        # draw nodes
-        for n in graph.Nodes:
-            x = my_scale(n.pos.x, x=True)
-            y = my_scale(n.pos.y, y=True)
-
+    def draw_nodes(self):
+        for i in self.graph.nodes:
+            x = self.my_scale(self.graph.nodes.get(i).get('pos').get_x(), x=True)
+            y = self.my_scale(self.graph.nodes.get(i).get('pos').get_y(), y=True)
             # its just to get a nice antialiased circle
-            gfxdraw.filled_circle(screen, int(x), int(y),
+            gfxdraw.filled_circle(self.screen, int(x), int(y),
                                   radius, Color(64, 30, 116))
-            gfxdraw.aacircle(screen, int(x), int(y),
+            gfxdraw.aacircle(self.screen, int(x), int(y),
                              radius, Color(0, 0, 0))
-
-            # draw the node id
-            id_srf = FONT.render(str(n.id), True, Color(255, 255, 255))
+            FONT = pygame.font.SysFont('Arial', 20, bold=True)
+            id_srf = FONT.render(str(i), True, Color(255, 255, 255))
             rect = id_srf.get_rect(center=(x, y))
-            screen.blit(id_srf, rect)
+            self.screen.blit(id_srf, rect)
 
-    # draw agents
-    for agent in agents:
-        agImage(int(agent.pos.x), int(agent.pos.y))
+    def draw_agents(self):
+        for agent in self.agents:
+            x = self.my_scale(agent.pos.get_x(), x=True)
+            y = self.my_scale(agent.pos.get_y(), y=True)
+            self.screen.blit(pygame.transform.scale(self.agImg, (30, 30)), (int(x), int(y)))
 
-    # draw pokemons (note: should differ (GUI wise) between the up and the down pokemons (currently they are marked in the same way).
-    for p in pokemons:
-        pocImage(int(p.pos.x), int(p.pos.y))
+    def draw_pokemons(self):
+        for pok in self.pokemons:
+            x = self.my_scale(pok.pos.get_x(), x=True)
+            y = self.my_scale(pok.pos.get_y(), y=True)
+            if (pok.type < 0):  # Different pok to any type (-1,1)
+                self.screen.blit(pygame.transform.scale(self.P1, (30, 30)), (int(x), int(y)))
+            else:
+                self.screen.blit(pygame.transform.scale(self.P2, (30, 30)), (int(x), int(y)))
 
-    # update screen changes
-    display.update()
 
-    # refresh rate
-    clock.tick(60)
-
-    # choose next edge
-    for agent in agents:
-        if agent.dest == -1:
-            next_node = (agent.src - 1) % len(graph.Nodes)
-            client.choose_next_edge(
-                '{"agent_id":' + str(agent.id) + ', "next_node_id":' + str(next_node) + '}')
-            ttl = client.time_to_end()
-            print(ttl, client.get_info())
-
-    client.move()
-# game over:
+if __name__ == '__main__':
+    PokemonGame()
