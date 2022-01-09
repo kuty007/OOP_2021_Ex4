@@ -116,6 +116,8 @@ assign him to this pokemon and add the path to collect this pokemon to the agent
 
 
 # UML
+![UML](https://user-images.githubusercontent.com/73474039/148698948-edc938d1-5fc5-44ed-902a-b256fea43f2b.jpg)
+
 
 ## For more information please visit our [WIKI pages](../../wiki)
 
