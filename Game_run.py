@@ -3,7 +3,7 @@ from asyncio import events
 from pygame import gfxdraw
 import pygame
 from pygame import *
-#from Algo import *
+from Algo import *
 from numpy import inf
 from pygame_widgets.button import Button
 
@@ -59,15 +59,12 @@ class PokemonGame:
                         exit(0)
             self.screen.blit(back, (back_left, back_top))
             self.screen.blit(pygame.transform.scale(tit, (230, 80)), (800, 580))
-            info_data = control.info
-            self.screen.blit(myfont.render('Score: ' + str(info_data["GameServer"]["grade"]), False, (0, 0, 0)),
-                             (0, 40))
+            info_data = json.loads(control.client.get_info())
+            self.screen.blit(myfont.render('Score: ' + str(info_data["GameServer"]["grade"]), False, (0, 0, 0)), (0, 40))
             self.screen.blit(
-                myfont.render('Time to end: ' + str(int(control.client.time_to_end()) // 1000) + ' sec', False,
-                              (0, 0, 0)),
+                myfont.render('Time to end: ' + str(int(control.client.time_to_end()) // 1000) + ' sec', False, (0, 0, 0)),
                 (0, 60))
-            self.screen.blit(myfont.render('Moves: ' + str(info_data["GameServer"]["moves"]), False, (0, 0, 0)),
-                             (0, 80))
+            self.screen.blit(myfont.render('Moves: ' + str(info_data["GameServer"]["moves"]), False, (0, 0, 0)), (0, 80))
             ########## Draw Graph ############
             self.draw_edges()
             self.draw_nodes()
@@ -76,10 +73,6 @@ class PokemonGame:
             self.draw_agents()
             ########## Draw Pokemons ############
             self.draw_pokemons()
-            # for i in self.agents:
-            #     if i.dest != -1:
-            #         self.agents = control.update_agents(self.agents, control.client)
-            #         break
             self.agents = control.update_agents(self.agents, control.client)
             self.pokemons = control.update_pokemons(self.pokemons, control.client, self.graph)
             control.allocate_agents(self.graph, self.pokemons, self.agents)
