@@ -1,8 +1,5 @@
-# for connection to server
 PORT = 6666
 HOST = '127.0.0.1'
-import pygame as pg
-from Algo import *
 from numpy import inf
 from client import Client
 from load_data_from_server import *
@@ -16,21 +13,17 @@ class Controller:
         self.client.start_connection(HOST, PORT)
         self.graph = load_graph_json(self.client.get_graph())
         self.pokemons = load_pokemon_list(self.client.get_pokemons(), self.graph)
-        start_agents_pos(self.client, self.pokemons)
+        self.start_agents_pos(self.client, self.pokemons)
         x = self.client.get_agents()
         ag_list = load_agents_list(x)
         self.agents = ag_list
         self.info = json.loads(self.client.get_info())
 
-
-
     def allocate_agents(self, graph: nx.DiGraph, pok_list, agent_list):
         """Function receives the agents list,graph and Pokemons list and allocate for each Pokemon an agent
         first check if the agent is close to the pokemon if so return.
-
         second check if thre is free agent and if so assign him to this pokemon and add the path to collect
         this pokemon to the agent path_to_Pokemon.
-
         third find the agent who will collect the pokemon the fastest.
         assign him to this pokemon and add the path to collect this pokemon to the agent path_to_Pokemon.
         """
@@ -39,7 +32,7 @@ class Controller:
                 min_time = inf
                 path_add = []
                 best_agent = -1
-                x = free_agents(graph, agent_list, pok)
+                x = self.free_agents(graph, agent_list, pok)
                 for agent in agent_list:
                     if agent.dest == pok.node_dest and agent.pos.distance(pok.pos) < eps:
                         return
