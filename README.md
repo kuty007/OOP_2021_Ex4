@@ -62,6 +62,28 @@ assign him to this pokemon and add the path to collect this pokemon to the agent
 | 15         | A3          |  4           |  1 min     |  1          | 229       | 496       |
 
 
+##   Download and run the Project:
+
+Before running this project, install the following packages:
+```
+Pygame Version 2.1.0.,numpy,networkx
+```
+
+Download the whole project and export it by the above actions:
+```
+Click Code (Green Button) -> Click Download ZIP -> Choose Extract to Folder in Zip 
+```
+
+Run the Server from cmd in the folder which contains 'Ex4_Server_v0.0.jar', choose one of the 16 cases ([0,15]):
+```
+java -jar Ex4_Server_v0.0.jar [0,15]
+```
+
+Then, open the Game_run.py file and run it:
+```
+OOP_2021_Ex4-> Game_run.py -> RUN
+```
+
 ## For more information please visit our [WIKI pages](../../wiki)
 
 
