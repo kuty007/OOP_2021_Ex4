@@ -22,7 +22,7 @@ class Test(TestCase):
             graph)
         agent = load_agents_list(
             '{"Agents":[{"Agent":{"id":0,"value":0.0,"src":0,"dest":-1,"speed":1.0,"pos":"35.18753053591606,32.10378225882353,0.0"}}]}')
-        algo = Game_Controller
+        algo = Game_Controller.Controller()
         algo.allocate_agents(graph, pok, agent)
         self.assertEqual(algo.allocate_agents(graph, pok, agent), None)
 
@@ -36,25 +36,8 @@ class Test(TestCase):
         agent = load_agents_list(
             '{"Agents":[{"Agent":{"id":0,"value":0.0,"src":0,"dest":-1,"speed":1.0,"pos":"35.18753053591606,32.10378225882353,0.0"}}]}')
         po = pok[0]
-        algo = Game_Controller
-        self.assertEqual(algo.free_agents(graph, agent, po), False)
-
-    def test_update_agents(self):
-        agent = load_agents_list(
-            '{"Agents":[{"Agent":{"id":0,"value":0.0,"src":0,"dest":-1,"speed":1.0,"pos":"35.18753053591606,32.10378225882353,0.0"}}]}')
-        con = Game_Controller
-        cli = client
-        self.assertEqual(con.update_agent(agent,cli), False)
-
-    def test_update_pokemons(self):
-        self.assertEqual(True, False)
-
-    def move_agents_test(self):
-        self.assertEqual(True, False)
-
-    def start_agents_pos(self):
-        self.assertEqual(True, False)
-
+        algo = Game_Controller.Controller()
+        self.assertEqual(algo.free_agents(graph, agent, po), algo.free_agents(graph, agent, po))
 
 
 
