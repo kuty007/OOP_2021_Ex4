@@ -1,4 +1,3 @@
-
 from Game_Controller import Controller
 from asyncio import events
 from pygame import gfxdraw
@@ -6,6 +5,7 @@ import pygame
 from pygame import *
 from Algo import *
 from pygame_widgets.button import Button
+
 WIDTH, HEIGHT = 1080, 720
 radius = 15
 
@@ -16,14 +16,6 @@ def scale(data, min_screen, max_screen, min_data, max_data):
     relative to min and max screen dimentions
     """
     return ((data - min_data) / (max_data - min_data)) * (max_screen - min_screen) + min_screen
-
-
-# P1 = pygame.image.load('data/pokemons/1.png').convert()
-# P2 = pygame.image.load('data/pokemons/3.png').convert()
-# pocImg = pygame.image.load('data/pokemons/1.png').convert()
-# agImg = pygame.image.load('data/pokemons/agent.png')
-# tit = pygame.image.load('data/pokemons/titel.png')
-# FONT = pygame.font.SysFont('Arial', 20, bold=True)
 
 
 class PokemonGame:
@@ -66,7 +58,7 @@ class PokemonGame:
                         exit(0)
             self.screen.blit(back, (back_left, back_top))
             self.screen.blit(pygame.transform.scale(tit, (230, 80)), (800, 580))
-            info_data = json.loads(control.client.get_info())
+            info_data = control.info
             self.screen.blit(myfont.render('Score: ' + str(info_data["GameServer"]["grade"]), False, (0, 0, 0)),
                              (0, 40))
             self.screen.blit(

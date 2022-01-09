@@ -17,11 +17,12 @@ class Controller:
         self.graph = load_graph_json(self.client.get_graph())
         self.pokemons = load_pokemon_list(self.client.get_pokemons(), self.graph)
         start_agents_pos(self.client, self.pokemons)
-        self.client.start()
         x = self.client.get_agents()
         ag_list = load_agents_list(x)
         self.agents = ag_list
-        allocate_agents(self.graph, self.pokemons, ag_list)
+        self.info = self.client.get_info()
+
+
 
     def allocate_agents(self, graph: nx.DiGraph, pok_list, agent_list):
         """Function receives the agents list,graph and Pokemons list and allocate for each Pokemon an agent

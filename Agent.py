@@ -20,7 +20,6 @@ class Agent:
 
     def load_agent(self, json_agent_str):
         """Function receives the agent string and load the values to the agent object
-
          """
         self.pos = Position(location=json_agent_str['pos'])
         self.speed = json_agent_str['speed']
