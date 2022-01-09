@@ -20,7 +20,7 @@ class Controller:
         x = self.client.get_agents()
         ag_list = load_agents_list(x)
         self.agents = ag_list
-        self.info = self.client.get_info()
+        self.info = json.loads(self.client.get_info())
 
 
 
