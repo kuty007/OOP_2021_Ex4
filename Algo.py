@@ -9,7 +9,7 @@ def allocate_agents(graph: nx.DiGraph, pok_list, agent_list):
     """Function receives the agents list,graph and Pokemons list and allocate for each Pokemon an agent
     first check if the agent is close to the pokemon if so return.
 
-    second check if thre is free agent and if so assign him to this pokemon and add the path to collect
+    second check if there is free agent and if so assign him to this pokemon and add the path to collect
     this pokemon to the agent path_to_Pokemon.
 
     third find the agent who will collect the pokemon the fastest.
@@ -49,11 +49,6 @@ def allocate_agents(graph: nx.DiGraph, pok_list, agent_list):
                         return
             agent_.path_to_Pokemon.extend(path_add)
             agent_.path_to_Pokemon.append(pok.node_dest)
-            # new_path = [agent_.path_to_Pokemon[0]]
-            # for i in range(1, len(agent_.path_to_Pokemon)):
-            #     if agent_.path_to_Pokemon[i] != agent_.path_to_Pokemon[i - 1]:
-            #         new_path.append(agent_.path_to_Pokemon[i])
-            # agent_.path_to_Pokemon = new_path
 
 
 def free_agents(graph: nx.DiGraph, agent_list, pok: Pokemon):

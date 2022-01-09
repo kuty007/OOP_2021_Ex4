@@ -1,6 +1,4 @@
 import unittest
-from load_data_from_server import *
-import networkx as nx
 
 
 class MyTestCase(unittest.TestCase):

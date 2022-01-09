@@ -1,5 +1,4 @@
 from load_data_from_server import *
-from Pokemon import *
 from Agent import *
 
 graph = load_graph_json(

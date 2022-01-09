@@ -3,7 +3,8 @@ from asyncio import events
 from pygame import gfxdraw
 import pygame
 from pygame import *
-from Algo import *
+#from Algo import *
+from numpy import inf
 from pygame_widgets.button import Button
 
 WIDTH, HEIGHT = 1080, 720
@@ -87,7 +88,7 @@ class PokemonGame:
             # refresh rate
             # clock.tick()
             # choose next edge
-            chose_next_edge(self.agents, control.client)
+            control.chose_next_edge(self.agents, control.client)
             pygame.time.wait(85)
             control.client.move()
 

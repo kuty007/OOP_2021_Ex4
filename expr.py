@@ -1,18 +1,8 @@
-import pygame_widgets
-
 from asyncio import events
-from types import SimpleNamespace
-from client import Client
-import json
 from pygame import gfxdraw
 import pygame
 from pygame import *
-from load_data_from_server import *
-import networkx as nx
-from Position import Position
-from numpy import inf
 from Algo import *
-import pygame_widgets
 from pygame_widgets.button import Button
 
 # init pygame

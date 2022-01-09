@@ -65,11 +65,11 @@ type: for pokemon lying on edge (src,dest) if src < dest => type > 0 else dest <
 this class is used to crate a Controller object that do all the algorithmic work and the connection to the server
 Controller have the following fields:
 
-client: use to communicate with the server 
+client: use to communicate with the server
 
 graph: nxDIgraph
 
-Pokémons: list of Pokémons 
+Pokémons: list of Pokémons
 
 agents = list of agents
 
@@ -85,16 +85,33 @@ the agents list accordingly
 chose_next_edge: receives the agents list and client send message to server using client.choose_next_edge with each
 agent next edge
 
-start_agents_pos: receives pokemons_list and client find out how many agents are in this stage and then locate
-them on the Pokémons src node
+start_agents_pos: receives pokemons_list and client find out how many agents are in this stage and then locate them on
+the Pokémons src node
 
 ### PokemonGame
+
 This class is used to draw the game this class gets all the information from the Controller and
 
 use it to draw the changes in the game in real time.
 
-
 We use this class to run the game
+
+---------
+
+# Algorithm
+The algorithm work in this way:
+itrite on all pokemons in the pokemons list
+and check who is the best agent to collect him using the allocate_agents function
+its work in the following way:
+
+First check if the agent is close to the pokemon if so return.
+
+Second check if there is free agent using free_agents method the and if so assign him to this pokemon and add the path to collect
+this pokemon to the agent path_to_Pokemon.
+
+Third find the agent who will collect the pokemon the fastest.
+assign him to this pokemon and add the path to collect this pokemon to the agent path_to_Pokemon.
+
 
 
 
