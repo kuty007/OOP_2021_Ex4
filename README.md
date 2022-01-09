@@ -65,8 +65,15 @@ type: for pokemon lying on edge (src,dest) if src < dest => type > 0 else dest <
 this class is used to crate a Controller object that do all the algorithmic work and the connection to the server
 Controller have the following fields:
 
-client: use to communicate with the server graph: nxDIgraph Pokémons: list of Pokémons agents = list of agents info:
-info form the server
+client: use to communicate with the server 
+
+graph: nxDIgraph
+
+Pokémons: list of Pokémons 
+
+agents = list of agents
+
+info: info form the server
 
 this class use the following methods:
 
