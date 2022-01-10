@@ -23,7 +23,7 @@ the client side.
 In this assignment we based our graph on Phyton package NetworkX see more info her: https://networkx.org/
 
 # Algorithm
-The algorithm work in this way:
+The algorithm work in the following way:
 iterate on all pokemons in the pokemons list
 and check who is the best agent to collect him using the allocate_agents function
 its work in the following way:
