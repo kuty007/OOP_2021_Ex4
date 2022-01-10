@@ -35,11 +35,9 @@ class Agent:
         src_id_on_way = self.dest
         dst_id = pok.node_src
         if src_id_on_way == -1:
-            path = nx.shortest_path(graph, src_id_on_node, dst_id, weight='weight')
-            dst = nx.shortest_path_length(graph, src_id_on_node, dst_id, weight='weight')
+            dst, path = nx.bidirectional_dijkstra(graph, src_id_on_node, dst_id, weight='weight')
         else:
-            path = nx.shortest_path(graph, src_id_on_way, dst_id, weight='weight')
-            dst = nx.shortest_path_length(graph, src_id_on_way, dst_id, weight='weight')
+            dst, path = nx.bidirectional_dijkstra(graph, src_id_on_way, dst_id, weight='weight')
         return path, dst, dst / self.speed
 
     def __repr__(self):
