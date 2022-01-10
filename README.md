@@ -24,7 +24,7 @@ In this assignment we based our graph on Phyton package NetworkX see more info h
 
 # Algorithm
 The algorithm work in this way:
-itrite on all pokemons in the pokemons list
+iterate on all pokemons in the pokemons list
 and check who is the best agent to collect him using the allocate_agents function
 its work in the following way:
 
